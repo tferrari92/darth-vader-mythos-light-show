@@ -1,7 +1,6 @@
 #include <Arduino.h>
 #include "SoftwareSerial.h"
 #include "Wire.h"
-#include "Adafruit_PWMServoDriver.h"
 #include <MultiRGBWLeds.h>
 #include "DYPlayerArduino.h"
 #include "IRremote.h"
@@ -30,8 +29,8 @@
 #define ENABLE_LIGHTSABER 0 // Lightsaber relay
 #endif
 
-// PCA9685 (PWM Driver) -- always required for the 4 RGBW lamps
-Adafruit_PWMServoDriver PCA9685 = Adafruit_PWMServoDriver(0x40, Wire);
+// RGBW lamps -- the MultiRGBWLeds library owns the PCA9685 (default 0x40).
+MultiRGBWLeds leds;
 
 // MP3 Player -- always required for audio
 SoftwareSerial mySerial(3, 11); // RX, TX (MP3 Player)
@@ -141,17 +140,13 @@ void setup()
     // IR Receiver
     irrecv.enableIRIn(); // Start the receiver
 
-    // PCA9685 (PWM Driver)
-    Wire.begin();
-    PCA9685.begin();
-    PCA9685.setPWMFreq(1600); // Maximum PWM frequency for LEDs
-
-    // MultiRGBWLeds: LED Positions
-    int backLeft[4] = {12, 13, 14, 15}; // {R, G, B, W}
-    int frontLeft[4] = {8, 9, 10, 11};  // {R, G, B, W}
-    int frontRight[4] = {4, 5, 6, 7};   // {R, G, B, W}
-    int backRight[4] = {0, 1, 2, 3};    // {R, G, B, W}
-    MultiRGBWLeds::begin(backLeft, frontLeft, frontRight, backRight);
+    // RGBW lamps. begin() creates/configures the PCA9685 and calls Wire.begin().
+    // Each lamp is four PCA9685 channels (0-15) in {R, G, B, W} order.
+    const uint8_t backLeft[4] = {12, 13, 14, 15};
+    const uint8_t frontLeft[4] = {8, 9, 10, 11};
+    const uint8_t frontRight[4] = {4, 5, 6, 7};
+    const uint8_t backRight[4] = {0, 1, 2, 3};
+    leds.begin(backLeft, frontLeft, frontRight, backRight);
 
 #if ENABLE_SMOKE
     // Relay (Humidifier) + Fan
@@ -273,36 +268,36 @@ void iDidOriginal()
     smokeOn();
     saberOn();
 
-    MultiRGBWLeds::set(
-        BACK_LEFT, ORANGE, 10,
-        FRONT_LEFT, ORANGE, 10,
-        FRONT_RIGHT, RED, 10,
-        BACK_RIGHT, RED, 10);
+    leds.set(
+        LampPosition::BackLeft, LampColor::Orange, 255,
+        LampPosition::FrontLeft, LampColor::Orange, 255,
+        LampPosition::FrontRight, LampColor::Red, 255,
+        LampPosition::BackRight, LampColor::Red, 255);
 
     frontStripSend(0xAAAA); // Has a 500ms delay (kept for audio sync)... + 0.5 = 17.5
 
     delay(1800); // + 1.8 = 19.3
 
-    MultiRGBWLeds::crossFade(
-        BACK_LEFT, ORANGE, 10, ORANGE, 3,
-        FRONT_LEFT, ORANGE, 10, ORANGE, 3,
-        FRONT_RIGHT, RED, 10, RED, 3,
-        BACK_RIGHT, RED, 10, RED, 3,
+    leds.crossFade(
+        LampPosition::BackLeft, LampColor::Orange, 255, LampColor::Orange, 77,
+        LampPosition::FrontLeft, LampColor::Orange, 255, LampColor::Orange, 77,
+        LampPosition::FrontRight, LampColor::Red, 255, LampColor::Red, 77,
+        LampPosition::BackRight, LampColor::Red, 255, LampColor::Red, 77,
         5500);
 
-    MultiRGBWLeds::set(
-        BACK_LEFT, ORANGE, 10,
-        FRONT_LEFT, ORANGE, 10,
-        FRONT_RIGHT, RED, 10,
-        BACK_RIGHT, RED, 10);
+    leds.set(
+        LampPosition::BackLeft, LampColor::Orange, 255,
+        LampPosition::FrontLeft, LampColor::Orange, 255,
+        LampPosition::FrontRight, LampColor::Red, 255,
+        LampPosition::BackRight, LampColor::Red, 255);
 
     delay(5900); // + 5.9 = 30.7
 
-    MultiRGBWLeds::crossFade(
-        BACK_LEFT, ORANGE, 10, ORANGE, 0,
-        FRONT_LEFT, ORANGE, 10, ORANGE, 0,
-        FRONT_RIGHT, RED, 10, RED, 0,
-        BACK_RIGHT, RED, 10, RED, 0,
+    leds.crossFade(
+        LampPosition::BackLeft, LampColor::Orange, 255, LampColor::Orange, 0,
+        LampPosition::FrontLeft, LampColor::Orange, 255, LampColor::Orange, 0,
+        LampPosition::FrontRight, LampColor::Red, 255, LampColor::Red, 0,
+        LampPosition::BackRight, LampColor::Red, 255, LampColor::Red, 0,
         3000);
 
     smokeOff();
@@ -322,26 +317,26 @@ void iDidCumbia()
 
     ////////////////////////////////////////////////////////////////////////
     // Arranca la cumbia bebeeeeee
-    MultiRGBWLeds::set(
-        BACK_LEFT, GREEN, 10,
-        FRONT_LEFT, GREEN, 10,
-        FRONT_RIGHT, INDIGO, 10,
-        BACK_RIGHT, INDIGO, 10);
+    leds.set(
+        LampPosition::BackLeft, LampColor::Green, 255,
+        LampPosition::FrontLeft, LampColor::Green, 255,
+        LampPosition::FrontRight, LampColor::Indigo, 255,
+        LampPosition::BackRight, LampColor::Indigo, 255);
 
     frontStripSend(0xBBBB); // Has a 500ms delay (kept for audio sync)
 
     delay(164);
 
-    MultiRGBWLeds::set(
-        BACK_LEFT, INDIGO, 10,
-        FRONT_LEFT, INDIGO, 10,
-        FRONT_RIGHT, GREEN, 10,
-        BACK_RIGHT, GREEN, 10);
+    leds.set(
+        LampPosition::BackLeft, LampColor::Indigo, 255,
+        LampPosition::FrontLeft, LampColor::Indigo, 255,
+        LampPosition::FrontRight, LampColor::Green, 255,
+        LampPosition::BackRight, LampColor::Green, 255);
 
     delay(664);
 
-    MultiRGBWLeds::sideToSide(LEFT_RIGHT, GREEN, INDIGO, 664, 3); // axis, color1, color2, time, count
-    MultiRGBWLeds::sideToSide(LEFT_RIGHT, LIME, PINK, 664, 4);    // axis, color1, color2, time, count
+    leds.sideToSide(Axis::LeftRight, LampColor::Green, LampColor::Indigo, 664, 3); // axis, color1, color2, halfPeriodMs, cycles
+    leds.sideToSide(Axis::LeftRight, LampColor::Lime, LampColor::Pink, 664, 4);    // axis, color1, color2, halfPeriodMs, cycles
 
     cuaaCuCuCuaaCuCuCuararaCuCuaaCuCuCuararaCuCuaaCuCuCuaaCuuCuCuaa();
     cuaaCuCuCuaaCuCuCuararaCuCuaaCuCuCuararaCuCuaaCuCuCuaaCuuCuCuaa();
@@ -352,11 +347,11 @@ void iDidCumbia()
     cuaaCuCuCuaaCuCuCuararaCuCuaaCuCuCuararaCuCuaaCuCuCuaaCuuCuCuaa();
     cuaaCuCuCuaaCuCuCuararaCuCuaaCuCuCuararaCuCuaaCuCuCuaaCuuCuCuaa();
 
-    MultiRGBWLeds::crossFade(
-        BACK_LEFT, WHITE, 10, WHITE, 0,
-        FRONT_LEFT, WHITE, 10, WHITE, 0,
-        FRONT_RIGHT, WHITE, 10, WHITE, 0,
-        BACK_RIGHT, WHITE, 10, WHITE, 0,
+    leds.crossFade(
+        LampPosition::BackLeft, LampColor::White, 255, LampColor::White, 0,
+        LampPosition::FrontLeft, LampColor::White, 255, LampColor::White, 0,
+        LampPosition::FrontRight, LampColor::White, 255, LampColor::White, 0,
+        LampPosition::BackRight, LampColor::White, 255, LampColor::White, 0,
         8000);
 
     smokeOff();
@@ -367,11 +362,11 @@ void iDidLofi()
 {
     iDidIntro();
 
-    MultiRGBWLeds::set(
-        BACK_LEFT, INDIGO, 10,
-        FRONT_LEFT, INDIGO, 10,
-        FRONT_RIGHT, MAGENTA, 10,
-        BACK_RIGHT, MAGENTA, 10);
+    leds.set(
+        LampPosition::BackLeft, LampColor::Indigo, 255,
+        LampPosition::FrontLeft, LampColor::Indigo, 255,
+        LampPosition::FrontRight, LampColor::Magenta, 255,
+        LampPosition::BackRight, LampColor::Magenta, 255);
 
     frontStripSend(0xBBBB); // Has a 500ms delay (kept for audio sync)... + 0.5 = 17.5
 }
@@ -380,11 +375,11 @@ void iDidMetal()
 {
     iDidIntro();
 
-    MultiRGBWLeds::set(
-        BACK_LEFT, ORANGE, 10,
-        FRONT_LEFT, ORANGE, 10,
-        FRONT_RIGHT, RED, 10,
-        BACK_RIGHT, RED, 10);
+    leds.set(
+        LampPosition::BackLeft, LampColor::Orange, 255,
+        LampPosition::FrontLeft, LampColor::Orange, 255,
+        LampPosition::FrontRight, LampColor::Red, 255,
+        LampPosition::BackRight, LampColor::Red, 255);
 
     frontStripSend(0xAAAA); // Has a 500ms delay (kept for audio sync)... + 0.5 = 17.5
 }
@@ -392,31 +387,29 @@ void iDidMetal()
 void forWhomTheBellTolls()
 {
     delay(23300);
-    MultiRGBWLeds::crossFade(
-        BACK_LEFT, RED, 0, RED, 10,
-        FRONT_LEFT, RED, 0, RED, 10,
-        FRONT_RIGHT, RED, 0, RED, 10,
-        BACK_RIGHT, RED, 0, RED, 10,
+    leds.crossFade(
+        LampPosition::BackLeft, LampColor::Red, 0, LampColor::Red, 255,
+        LampPosition::FrontLeft, LampColor::Red, 0, LampColor::Red, 255,
+        LampPosition::FrontRight, LampColor::Red, 0, LampColor::Red, 255,
+        LampPosition::BackRight, LampColor::Red, 0, LampColor::Red, 255,
         100);
 }
 
 void iDidIntro()
 {
-    MultiRGBWLeds::resetAllPositions();
+    leds.resetAllPositions();
     delay(1200); // + 1.2
 
     //////////////////////////////////////////
     // Up to here we MUST sum 1.2 seconds!!!
-    MultiRGBWLeds::crossFade(
-        FRONT_LEFT, WHITE, 0, WHITE, 10,
-        FRONT_RIGHT, SKY, 0, SKY, 10,
+    leds.crossFade(
+        LampPosition::FrontLeft, LampColor::White, 0, LampColor::White, 255,
+        LampPosition::FrontRight, LampColor::Sky, 0, LampColor::Sky, 255,
         8000);
 
-    MultiRGBWLeds::crossFade(
-        // BACK_LEFT, RED, 0, RED, 10,
-        FRONT_LEFT, WHITE, 10, WHITE, 0,
-        FRONT_RIGHT, SKY, 10, SKY, 0,
-        // BACK_RIGHT, RED, 0, RED, 10,
+    leds.crossFade(
+        LampPosition::FrontLeft, LampColor::White, 255, LampColor::White, 0,
+        LampPosition::FrontRight, LampColor::Sky, 255, LampColor::Sky, 0,
         4500);
 
     //////////////////////////////////////////
@@ -426,163 +419,163 @@ void iDidIntro()
 
 void paaPaaPaaPaaPaPaaPaaPaPaaPeePeePeePeePePeePeePePee()
 {
-    MultiRGBWLeds::sideToSide(LEFT_RIGHT, GREEN, INDIGO, 664, 4); // axis, color1, color2, time, count
-    MultiRGBWLeds::sideToSide(LEFT_RIGHT, LIME, PINK, 664, 4);    // axis, color1, color2, time, count
+    leds.sideToSide(Axis::LeftRight, LampColor::Green, LampColor::Indigo, 664, 4); // axis, color1, color2, halfPeriodMs, cycles
+    leds.sideToSide(Axis::LeftRight, LampColor::Lime, LampColor::Pink, 664, 4);    // axis, color1, color2, halfPeriodMs, cycles
 }
 
 void cuaaCuCuCuaaCuCuCuararaCuCuaaCuCuCuararaCuCuaaCuCuCuaaCuuCuCuaa()
 {
 
     // cuaaa1
-    MultiRGBWLeds::crossFade(
-        BACK_LEFT, WHITE, 0, WHITE, 10,
-        FRONT_LEFT, WHITE, 0, WHITE, 10,
-        FRONT_RIGHT, WHITE, 0, WHITE, 10,
-        BACK_RIGHT, WHITE, 0, WHITE, 10,
+    leds.crossFade(
+        LampPosition::BackLeft, LampColor::White, 0, LampColor::White, 255,
+        LampPosition::FrontLeft, LampColor::White, 0, LampColor::White, 255,
+        LampPosition::FrontRight, LampColor::White, 0, LampColor::White, 255,
+        LampPosition::BackRight, LampColor::White, 0, LampColor::White, 255,
         400);
 
     delay(270);
 
-    MultiRGBWLeds::resetAllPositions();
+    leds.resetAllPositions();
 
     // cucu2.1
-    MultiRGBWLeds::flash(
-        FRONT_RIGHT, YELLOW, 10,
-        BACK_RIGHT, YELLOW, 10,
+    leds.flash(
+        LampPosition::FrontRight, LampColor::Yellow, 255,
+        LampPosition::BackRight, LampColor::Yellow, 255,
         200, 100);
 
     // cucu2.2
-    MultiRGBWLeds::flash(
-        BACK_LEFT, YELLOW, 10,
-        FRONT_LEFT, YELLOW, 10,
+    leds.flash(
+        LampPosition::BackLeft, LampColor::Yellow, 255,
+        LampPosition::FrontLeft, LampColor::Yellow, 255,
         200, 100);
 
     // cuaaa3
-    MultiRGBWLeds::crossFade(
-        BACK_LEFT, WHITE, 0, WHITE, 10,
-        FRONT_LEFT, WHITE, 0, WHITE, 10,
-        FRONT_RIGHT, WHITE, 0, WHITE, 10,
-        BACK_RIGHT, WHITE, 0, WHITE, 10,
+    leds.crossFade(
+        LampPosition::BackLeft, LampColor::White, 0, LampColor::White, 255,
+        LampPosition::FrontLeft, LampColor::White, 0, LampColor::White, 255,
+        LampPosition::FrontRight, LampColor::White, 0, LampColor::White, 255,
+        LampPosition::BackRight, LampColor::White, 0, LampColor::White, 255,
         400);
 
     delay(270);
 
-    MultiRGBWLeds::resetAllPositions();
+    leds.resetAllPositions();
 
     // cucu4.1
-    MultiRGBWLeds::flash(
-        FRONT_RIGHT, YELLOW, 10,
-        BACK_RIGHT, YELLOW, 10,
+    leds.flash(
+        LampPosition::FrontRight, LampColor::Yellow, 255,
+        LampPosition::BackRight, LampColor::Yellow, 255,
         200, 100);
 
     // cucu4.2
-    MultiRGBWLeds::flash(
-        BACK_LEFT, YELLOW, 10,
-        FRONT_LEFT, YELLOW, 10,
+    leds.flash(
+        LampPosition::BackLeft, LampColor::Yellow, 255,
+        LampPosition::FrontLeft, LampColor::Yellow, 255,
         200, 100);
 
     // cuarara5
-    MultiRGBWLeds::spin(AQUA, CLOCKWISE, 90, 2); // color, direction, speed (+ is slower, - is faster), full rotations
-    MultiRGBWLeds::resetAllPositions();
+    leds.spin(LampColor::Aqua, Direction::Clockwise, 90, 2); // color, direction, stepMs, rotations
+    leds.resetAllPositions();
 
     delay(200);
 
     // cucuaa6.1
-    MultiRGBWLeds::flash(
-        FRONT_RIGHT, YELLOW, 10,
-        BACK_RIGHT, YELLOW, 10,
+    leds.flash(
+        LampPosition::FrontRight, LampColor::Yellow, 255,
+        LampPosition::BackRight, LampColor::Yellow, 255,
         200, 100);
 
     // cucuaa6.2
-    MultiRGBWLeds::crossFade(
-        BACK_LEFT, WHITE, 0, WHITE, 10,
-        FRONT_LEFT, WHITE, 0, WHITE, 10,
-        FRONT_RIGHT, WHITE, 0, WHITE, 10,
-        BACK_RIGHT, WHITE, 0, WHITE, 10,
+    leds.crossFade(
+        LampPosition::BackLeft, LampColor::White, 0, LampColor::White, 255,
+        LampPosition::FrontLeft, LampColor::White, 0, LampColor::White, 255,
+        LampPosition::FrontRight, LampColor::White, 0, LampColor::White, 255,
+        LampPosition::BackRight, LampColor::White, 0, LampColor::White, 255,
         400);
 
     delay(350);
 
-    MultiRGBWLeds::resetAllPositions();
+    leds.resetAllPositions();
 
     // cucu7.1
-    MultiRGBWLeds::flash(
-        FRONT_RIGHT, YELLOW, 10,
-        BACK_RIGHT, YELLOW, 10,
+    leds.flash(
+        LampPosition::FrontRight, LampColor::Yellow, 255,
+        LampPosition::BackRight, LampColor::Yellow, 255,
         200, 100);
 
     // cucu7.2
-    MultiRGBWLeds::flash(
-        BACK_LEFT, YELLOW, 10,
-        FRONT_LEFT, YELLOW, 10,
+    leds.flash(
+        LampPosition::BackLeft, LampColor::Yellow, 255,
+        LampPosition::FrontLeft, LampColor::Yellow, 255,
         200, 100);
 
     // cuarara8
-    MultiRGBWLeds::spin(ORANGE, ANTICLOCKWISE, 90, 2); // color, direction, speed (+ is slower, - is faster), full rotations
-    MultiRGBWLeds::resetAllPositions();
+    leds.spin(LampColor::Orange, Direction::Anticlockwise, 90, 2); // color, direction, stepMs, rotations
+    leds.resetAllPositions();
 
     delay(200);
 
     // cucuaa9.1
-    MultiRGBWLeds::flash(
-        FRONT_RIGHT, YELLOW, 10,
-        BACK_RIGHT, YELLOW, 10,
+    leds.flash(
+        LampPosition::FrontRight, LampColor::Yellow, 255,
+        LampPosition::BackRight, LampColor::Yellow, 255,
         200, 100);
 
     // cucuaa9.2
-    MultiRGBWLeds::crossFade(
-        BACK_LEFT, WHITE, 0, WHITE, 10,
-        FRONT_LEFT, WHITE, 0, WHITE, 10,
-        FRONT_RIGHT, WHITE, 0, WHITE, 10,
-        BACK_RIGHT, WHITE, 0, WHITE, 10,
+    leds.crossFade(
+        LampPosition::BackLeft, LampColor::White, 0, LampColor::White, 255,
+        LampPosition::FrontLeft, LampColor::White, 0, LampColor::White, 255,
+        LampPosition::FrontRight, LampColor::White, 0, LampColor::White, 255,
+        LampPosition::BackRight, LampColor::White, 0, LampColor::White, 255,
         400);
 
     delay(300);
 
-    MultiRGBWLeds::resetAllPositions();
+    leds.resetAllPositions();
 
     // cuuucu10.1
-    MultiRGBWLeds::set(
-        BACK_RIGHT, YELLOW, 10,
-        BACK_LEFT, YELLOW, 10);
+    leds.set(
+        LampPosition::BackRight, LampColor::Yellow, 255,
+        LampPosition::BackLeft, LampColor::Yellow, 255);
     delay(300);
 
     // cuuucu10.2
-    MultiRGBWLeds::set(
-        FRONT_LEFT, YELLOW, 10,
-        FRONT_RIGHT, YELLOW, 10);
+    leds.set(
+        LampPosition::FrontLeft, LampColor::Yellow, 255,
+        LampPosition::FrontRight, LampColor::Yellow, 255);
     delay(300);
 
     // cuaaa11
-    MultiRGBWLeds::crossFade(
-        BACK_LEFT, WHITE, 0, WHITE, 10,
-        FRONT_LEFT, WHITE, 0, WHITE, 10,
-        FRONT_RIGHT, WHITE, 0, WHITE, 10,
-        BACK_RIGHT, WHITE, 0, WHITE, 10,
+    leds.crossFade(
+        LampPosition::BackLeft, LampColor::White, 0, LampColor::White, 255,
+        LampPosition::FrontLeft, LampColor::White, 0, LampColor::White, 255,
+        LampPosition::FrontRight, LampColor::White, 0, LampColor::White, 255,
+        LampPosition::BackRight, LampColor::White, 0, LampColor::White, 255,
         400);
 
     delay(300);
 
-    MultiRGBWLeds::resetAllPositions();
+    leds.resetAllPositions();
 
     // cuuucu12.1
-    MultiRGBWLeds::set(
-        BACK_RIGHT, YELLOW, 10,
-        BACK_LEFT, YELLOW, 10);
+    leds.set(
+        LampPosition::BackRight, LampColor::Yellow, 255,
+        LampPosition::BackLeft, LampColor::Yellow, 255);
     delay(400);
 
     // cuuucu12.2
-    MultiRGBWLeds::set(
-        FRONT_LEFT, YELLOW, 10,
-        FRONT_RIGHT, YELLOW, 10);
+    leds.set(
+        LampPosition::FrontLeft, LampColor::Yellow, 255,
+        LampPosition::FrontRight, LampColor::Yellow, 255);
     delay(300);
 
     // cuaaaaaa13
-    MultiRGBWLeds::crossFade(
-        BACK_LEFT, WHITE, 0, WHITE, 10,
-        FRONT_LEFT, WHITE, 0, WHITE, 10,
-        FRONT_RIGHT, WHITE, 0, WHITE, 10,
-        BACK_RIGHT, WHITE, 0, WHITE, 10,
+    leds.crossFade(
+        LampPosition::BackLeft, LampColor::White, 0, LampColor::White, 255,
+        LampPosition::FrontLeft, LampColor::White, 0, LampColor::White, 255,
+        LampPosition::FrontRight, LampColor::White, 0, LampColor::White, 255,
+        LampPosition::BackRight, LampColor::White, 0, LampColor::White, 255,
         500);
 
     delay(800);
