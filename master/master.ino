@@ -269,35 +269,35 @@ void iDidOriginal()
     saberOn();
 
     leds.set(
-        LampPosition::BackLeft, LampColor::Orange, 255,
-        LampPosition::FrontLeft, LampColor::Orange, 255,
-        LampPosition::FrontRight, LampColor::Red, 255,
-        LampPosition::BackRight, LampColor::Red, 255);
+        LampPosition::BackLeft, LampColor::Orange, 10,
+        LampPosition::FrontLeft, LampColor::Orange, 10,
+        LampPosition::FrontRight, LampColor::Red, 10,
+        LampPosition::BackRight, LampColor::Red, 10);
 
     frontStripSend(0xAAAA); // Has a 500ms delay (kept for audio sync)... + 0.5 = 17.5
 
     delay(1800); // + 1.8 = 19.3
 
     leds.crossFade(
-        LampPosition::BackLeft, LampColor::Orange, 255, LampColor::Orange, 77,
-        LampPosition::FrontLeft, LampColor::Orange, 255, LampColor::Orange, 77,
-        LampPosition::FrontRight, LampColor::Red, 255, LampColor::Red, 77,
-        LampPosition::BackRight, LampColor::Red, 255, LampColor::Red, 77,
+        LampPosition::BackLeft, LampColor::Orange, 10, LampColor::Orange, 3,
+        LampPosition::FrontLeft, LampColor::Orange, 10, LampColor::Orange, 3,
+        LampPosition::FrontRight, LampColor::Red, 10, LampColor::Red, 3,
+        LampPosition::BackRight, LampColor::Red, 10, LampColor::Red, 3,
         5500);
 
     leds.set(
-        LampPosition::BackLeft, LampColor::Orange, 255,
-        LampPosition::FrontLeft, LampColor::Orange, 255,
-        LampPosition::FrontRight, LampColor::Red, 255,
-        LampPosition::BackRight, LampColor::Red, 255);
+        LampPosition::BackLeft, LampColor::Orange, 10,
+        LampPosition::FrontLeft, LampColor::Orange, 10,
+        LampPosition::FrontRight, LampColor::Red, 10,
+        LampPosition::BackRight, LampColor::Red, 10);
 
     delay(5900); // + 5.9 = 30.7
 
     leds.crossFade(
-        LampPosition::BackLeft, LampColor::Orange, 255, LampColor::Orange, 0,
-        LampPosition::FrontLeft, LampColor::Orange, 255, LampColor::Orange, 0,
-        LampPosition::FrontRight, LampColor::Red, 255, LampColor::Red, 0,
-        LampPosition::BackRight, LampColor::Red, 255, LampColor::Red, 0,
+        LampPosition::BackLeft, LampColor::Orange, 10, LampColor::Orange, 0,
+        LampPosition::FrontLeft, LampColor::Orange, 10, LampColor::Orange, 0,
+        LampPosition::FrontRight, LampColor::Red, 10, LampColor::Red, 0,
+        LampPosition::BackRight, LampColor::Red, 10, LampColor::Red, 0,
         3000);
 
     smokeOff();
@@ -318,20 +318,20 @@ void iDidCumbia()
     ////////////////////////////////////////////////////////////////////////
     // Arranca la cumbia bebeeeeee
     leds.set(
-        LampPosition::BackLeft, LampColor::Green, 255,
-        LampPosition::FrontLeft, LampColor::Green, 255,
-        LampPosition::FrontRight, LampColor::Indigo, 255,
-        LampPosition::BackRight, LampColor::Indigo, 255);
+        LampPosition::BackLeft, LampColor::Green, 10,
+        LampPosition::FrontLeft, LampColor::Green, 10,
+        LampPosition::FrontRight, LampColor::Indigo, 10,
+        LampPosition::BackRight, LampColor::Indigo, 10);
 
     frontStripSend(0xBBBB); // Has a 500ms delay (kept for audio sync)
 
     delay(164);
 
     leds.set(
-        LampPosition::BackLeft, LampColor::Indigo, 255,
-        LampPosition::FrontLeft, LampColor::Indigo, 255,
-        LampPosition::FrontRight, LampColor::Green, 255,
-        LampPosition::BackRight, LampColor::Green, 255);
+        LampPosition::BackLeft, LampColor::Indigo, 10,
+        LampPosition::FrontLeft, LampColor::Indigo, 10,
+        LampPosition::FrontRight, LampColor::Green, 10,
+        LampPosition::BackRight, LampColor::Green, 10);
 
     delay(664);
 
@@ -348,10 +348,10 @@ void iDidCumbia()
     cuaaCuCuCuaaCuCuCuararaCuCuaaCuCuCuararaCuCuaaCuCuCuaaCuuCuCuaa();
 
     leds.crossFade(
-        LampPosition::BackLeft, LampColor::White, 255, LampColor::White, 0,
-        LampPosition::FrontLeft, LampColor::White, 255, LampColor::White, 0,
-        LampPosition::FrontRight, LampColor::White, 255, LampColor::White, 0,
-        LampPosition::BackRight, LampColor::White, 255, LampColor::White, 0,
+        LampPosition::BackLeft, LampColor::White, 10, LampColor::White, 0,
+        LampPosition::FrontLeft, LampColor::White, 10, LampColor::White, 0,
+        LampPosition::FrontRight, LampColor::White, 10, LampColor::White, 0,
+        LampPosition::BackRight, LampColor::White, 10, LampColor::White, 0,
         8000);
 
     smokeOff();
@@ -363,10 +363,10 @@ void iDidLofi()
     iDidIntro();
 
     leds.set(
-        LampPosition::BackLeft, LampColor::Indigo, 255,
-        LampPosition::FrontLeft, LampColor::Indigo, 255,
-        LampPosition::FrontRight, LampColor::Magenta, 255,
-        LampPosition::BackRight, LampColor::Magenta, 255);
+        LampPosition::BackLeft, LampColor::Indigo, 10,
+        LampPosition::FrontLeft, LampColor::Indigo, 10,
+        LampPosition::FrontRight, LampColor::Magenta, 10,
+        LampPosition::BackRight, LampColor::Magenta, 10);
 
     frontStripSend(0xBBBB); // Has a 500ms delay (kept for audio sync)... + 0.5 = 17.5
 }
@@ -376,10 +376,10 @@ void iDidMetal()
     iDidIntro();
 
     leds.set(
-        LampPosition::BackLeft, LampColor::Orange, 255,
-        LampPosition::FrontLeft, LampColor::Orange, 255,
-        LampPosition::FrontRight, LampColor::Red, 255,
-        LampPosition::BackRight, LampColor::Red, 255);
+        LampPosition::BackLeft, LampColor::Orange, 10,
+        LampPosition::FrontLeft, LampColor::Orange, 10,
+        LampPosition::FrontRight, LampColor::Red, 10,
+        LampPosition::BackRight, LampColor::Red, 10);
 
     frontStripSend(0xAAAA); // Has a 500ms delay (kept for audio sync)... + 0.5 = 17.5
 }
@@ -388,10 +388,10 @@ void forWhomTheBellTolls()
 {
     delay(23300);
     leds.crossFade(
-        LampPosition::BackLeft, LampColor::Red, 0, LampColor::Red, 255,
-        LampPosition::FrontLeft, LampColor::Red, 0, LampColor::Red, 255,
-        LampPosition::FrontRight, LampColor::Red, 0, LampColor::Red, 255,
-        LampPosition::BackRight, LampColor::Red, 0, LampColor::Red, 255,
+        LampPosition::BackLeft, LampColor::Red, 0, LampColor::Red, 10,
+        LampPosition::FrontLeft, LampColor::Red, 0, LampColor::Red, 10,
+        LampPosition::FrontRight, LampColor::Red, 0, LampColor::Red, 10,
+        LampPosition::BackRight, LampColor::Red, 0, LampColor::Red, 10,
         100);
 }
 
@@ -403,13 +403,13 @@ void iDidIntro()
     //////////////////////////////////////////
     // Up to here we MUST sum 1.2 seconds!!!
     leds.crossFade(
-        LampPosition::FrontLeft, LampColor::White, 0, LampColor::White, 255,
-        LampPosition::FrontRight, LampColor::Sky, 0, LampColor::Sky, 255,
+        LampPosition::FrontLeft, LampColor::White, 0, LampColor::White, 10,
+        LampPosition::FrontRight, LampColor::Sky, 0, LampColor::Sky, 10,
         8000);
 
     leds.crossFade(
-        LampPosition::FrontLeft, LampColor::White, 255, LampColor::White, 0,
-        LampPosition::FrontRight, LampColor::Sky, 255, LampColor::Sky, 0,
+        LampPosition::FrontLeft, LampColor::White, 10, LampColor::White, 0,
+        LampPosition::FrontRight, LampColor::Sky, 10, LampColor::Sky, 0,
         4500);
 
     //////////////////////////////////////////
@@ -428,10 +428,10 @@ void cuaaCuCuCuaaCuCuCuararaCuCuaaCuCuCuararaCuCuaaCuCuCuaaCuuCuCuaa()
 
     // cuaaa1
     leds.crossFade(
-        LampPosition::BackLeft, LampColor::White, 0, LampColor::White, 255,
-        LampPosition::FrontLeft, LampColor::White, 0, LampColor::White, 255,
-        LampPosition::FrontRight, LampColor::White, 0, LampColor::White, 255,
-        LampPosition::BackRight, LampColor::White, 0, LampColor::White, 255,
+        LampPosition::BackLeft, LampColor::White, 0, LampColor::White, 10,
+        LampPosition::FrontLeft, LampColor::White, 0, LampColor::White, 10,
+        LampPosition::FrontRight, LampColor::White, 0, LampColor::White, 10,
+        LampPosition::BackRight, LampColor::White, 0, LampColor::White, 10,
         400);
 
     delay(270);
@@ -440,22 +440,22 @@ void cuaaCuCuCuaaCuCuCuararaCuCuaaCuCuCuararaCuCuaaCuCuCuaaCuuCuCuaa()
 
     // cucu2.1
     leds.flash(
-        LampPosition::FrontRight, LampColor::Yellow, 255,
-        LampPosition::BackRight, LampColor::Yellow, 255,
+        LampPosition::FrontRight, LampColor::Yellow, 10,
+        LampPosition::BackRight, LampColor::Yellow, 10,
         200, 100);
 
     // cucu2.2
     leds.flash(
-        LampPosition::BackLeft, LampColor::Yellow, 255,
-        LampPosition::FrontLeft, LampColor::Yellow, 255,
+        LampPosition::BackLeft, LampColor::Yellow, 10,
+        LampPosition::FrontLeft, LampColor::Yellow, 10,
         200, 100);
 
     // cuaaa3
     leds.crossFade(
-        LampPosition::BackLeft, LampColor::White, 0, LampColor::White, 255,
-        LampPosition::FrontLeft, LampColor::White, 0, LampColor::White, 255,
-        LampPosition::FrontRight, LampColor::White, 0, LampColor::White, 255,
-        LampPosition::BackRight, LampColor::White, 0, LampColor::White, 255,
+        LampPosition::BackLeft, LampColor::White, 0, LampColor::White, 10,
+        LampPosition::FrontLeft, LampColor::White, 0, LampColor::White, 10,
+        LampPosition::FrontRight, LampColor::White, 0, LampColor::White, 10,
+        LampPosition::BackRight, LampColor::White, 0, LampColor::White, 10,
         400);
 
     delay(270);
@@ -464,14 +464,14 @@ void cuaaCuCuCuaaCuCuCuararaCuCuaaCuCuCuararaCuCuaaCuCuCuaaCuuCuCuaa()
 
     // cucu4.1
     leds.flash(
-        LampPosition::FrontRight, LampColor::Yellow, 255,
-        LampPosition::BackRight, LampColor::Yellow, 255,
+        LampPosition::FrontRight, LampColor::Yellow, 10,
+        LampPosition::BackRight, LampColor::Yellow, 10,
         200, 100);
 
     // cucu4.2
     leds.flash(
-        LampPosition::BackLeft, LampColor::Yellow, 255,
-        LampPosition::FrontLeft, LampColor::Yellow, 255,
+        LampPosition::BackLeft, LampColor::Yellow, 10,
+        LampPosition::FrontLeft, LampColor::Yellow, 10,
         200, 100);
 
     // cuarara5
@@ -482,16 +482,16 @@ void cuaaCuCuCuaaCuCuCuararaCuCuaaCuCuCuararaCuCuaaCuCuCuaaCuuCuCuaa()
 
     // cucuaa6.1
     leds.flash(
-        LampPosition::FrontRight, LampColor::Yellow, 255,
-        LampPosition::BackRight, LampColor::Yellow, 255,
+        LampPosition::FrontRight, LampColor::Yellow, 10,
+        LampPosition::BackRight, LampColor::Yellow, 10,
         200, 100);
 
     // cucuaa6.2
     leds.crossFade(
-        LampPosition::BackLeft, LampColor::White, 0, LampColor::White, 255,
-        LampPosition::FrontLeft, LampColor::White, 0, LampColor::White, 255,
-        LampPosition::FrontRight, LampColor::White, 0, LampColor::White, 255,
-        LampPosition::BackRight, LampColor::White, 0, LampColor::White, 255,
+        LampPosition::BackLeft, LampColor::White, 0, LampColor::White, 10,
+        LampPosition::FrontLeft, LampColor::White, 0, LampColor::White, 10,
+        LampPosition::FrontRight, LampColor::White, 0, LampColor::White, 10,
+        LampPosition::BackRight, LampColor::White, 0, LampColor::White, 10,
         400);
 
     delay(350);
@@ -500,14 +500,14 @@ void cuaaCuCuCuaaCuCuCuararaCuCuaaCuCuCuararaCuCuaaCuCuCuaaCuuCuCuaa()
 
     // cucu7.1
     leds.flash(
-        LampPosition::FrontRight, LampColor::Yellow, 255,
-        LampPosition::BackRight, LampColor::Yellow, 255,
+        LampPosition::FrontRight, LampColor::Yellow, 10,
+        LampPosition::BackRight, LampColor::Yellow, 10,
         200, 100);
 
     // cucu7.2
     leds.flash(
-        LampPosition::BackLeft, LampColor::Yellow, 255,
-        LampPosition::FrontLeft, LampColor::Yellow, 255,
+        LampPosition::BackLeft, LampColor::Yellow, 10,
+        LampPosition::FrontLeft, LampColor::Yellow, 10,
         200, 100);
 
     // cuarara8
@@ -518,16 +518,16 @@ void cuaaCuCuCuaaCuCuCuararaCuCuaaCuCuCuararaCuCuaaCuCuCuaaCuuCuCuaa()
 
     // cucuaa9.1
     leds.flash(
-        LampPosition::FrontRight, LampColor::Yellow, 255,
-        LampPosition::BackRight, LampColor::Yellow, 255,
+        LampPosition::FrontRight, LampColor::Yellow, 10,
+        LampPosition::BackRight, LampColor::Yellow, 10,
         200, 100);
 
     // cucuaa9.2
     leds.crossFade(
-        LampPosition::BackLeft, LampColor::White, 0, LampColor::White, 255,
-        LampPosition::FrontLeft, LampColor::White, 0, LampColor::White, 255,
-        LampPosition::FrontRight, LampColor::White, 0, LampColor::White, 255,
-        LampPosition::BackRight, LampColor::White, 0, LampColor::White, 255,
+        LampPosition::BackLeft, LampColor::White, 0, LampColor::White, 10,
+        LampPosition::FrontLeft, LampColor::White, 0, LampColor::White, 10,
+        LampPosition::FrontRight, LampColor::White, 0, LampColor::White, 10,
+        LampPosition::BackRight, LampColor::White, 0, LampColor::White, 10,
         400);
 
     delay(300);
@@ -536,22 +536,22 @@ void cuaaCuCuCuaaCuCuCuararaCuCuaaCuCuCuararaCuCuaaCuCuCuaaCuuCuCuaa()
 
     // cuuucu10.1
     leds.set(
-        LampPosition::BackRight, LampColor::Yellow, 255,
-        LampPosition::BackLeft, LampColor::Yellow, 255);
+        LampPosition::BackRight, LampColor::Yellow, 10,
+        LampPosition::BackLeft, LampColor::Yellow, 10);
     delay(300);
 
     // cuuucu10.2
     leds.set(
-        LampPosition::FrontLeft, LampColor::Yellow, 255,
-        LampPosition::FrontRight, LampColor::Yellow, 255);
+        LampPosition::FrontLeft, LampColor::Yellow, 10,
+        LampPosition::FrontRight, LampColor::Yellow, 10);
     delay(300);
 
     // cuaaa11
     leds.crossFade(
-        LampPosition::BackLeft, LampColor::White, 0, LampColor::White, 255,
-        LampPosition::FrontLeft, LampColor::White, 0, LampColor::White, 255,
-        LampPosition::FrontRight, LampColor::White, 0, LampColor::White, 255,
-        LampPosition::BackRight, LampColor::White, 0, LampColor::White, 255,
+        LampPosition::BackLeft, LampColor::White, 0, LampColor::White, 10,
+        LampPosition::FrontLeft, LampColor::White, 0, LampColor::White, 10,
+        LampPosition::FrontRight, LampColor::White, 0, LampColor::White, 10,
+        LampPosition::BackRight, LampColor::White, 0, LampColor::White, 10,
         400);
 
     delay(300);
@@ -560,22 +560,22 @@ void cuaaCuCuCuaaCuCuCuararaCuCuaaCuCuCuararaCuCuaaCuCuCuaaCuuCuCuaa()
 
     // cuuucu12.1
     leds.set(
-        LampPosition::BackRight, LampColor::Yellow, 255,
-        LampPosition::BackLeft, LampColor::Yellow, 255);
+        LampPosition::BackRight, LampColor::Yellow, 10,
+        LampPosition::BackLeft, LampColor::Yellow, 10);
     delay(400);
 
     // cuuucu12.2
     leds.set(
-        LampPosition::FrontLeft, LampColor::Yellow, 255,
-        LampPosition::FrontRight, LampColor::Yellow, 255);
+        LampPosition::FrontLeft, LampColor::Yellow, 10,
+        LampPosition::FrontRight, LampColor::Yellow, 10);
     delay(300);
 
     // cuaaaaaa13
     leds.crossFade(
-        LampPosition::BackLeft, LampColor::White, 0, LampColor::White, 255,
-        LampPosition::FrontLeft, LampColor::White, 0, LampColor::White, 255,
-        LampPosition::FrontRight, LampColor::White, 0, LampColor::White, 255,
-        LampPosition::BackRight, LampColor::White, 0, LampColor::White, 255,
+        LampPosition::BackLeft, LampColor::White, 0, LampColor::White, 10,
+        LampPosition::FrontLeft, LampColor::White, 0, LampColor::White, 10,
+        LampPosition::FrontRight, LampColor::White, 0, LampColor::White, 10,
+        LampPosition::BackRight, LampColor::White, 0, LampColor::White, 10,
         500);
 
     delay(800);
