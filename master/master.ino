@@ -6,36 +6,70 @@
 #include "DYPlayerArduino.h"
 #include "IRremote.h"
 
-// PCA9685 (PWM Driver)
+// ============================================================
+//  FEATURE FLAGS
+//  ------------------------------------------------------------
+//  The basic build is 4 RGBW lamps + audio, which works with
+//  every flag below set to 0. Turn on the extra hardware you
+//  actually wired up by setting its flag to 1.
+//
+//  You can either edit the defaults here, OR override them at
+//  build time without touching this file (the closest thing to
+//  an "env var" on Arduino), e.g. with arduino-cli:
+//    --build-property "build.extra_flags=-DENABLE_SMOKE=1"
+//  or in platformio.ini:
+//    build_flags = -DENABLE_SMOKE=1
+// ============================================================
+#ifndef ENABLE_FRONT_STRIP
+#define ENABLE_FRONT_STRIP 0 // ATtiny85 NeoPixel front strip (I2C slave)
+#endif
+#ifndef ENABLE_SMOKE
+#define ENABLE_SMOKE 0 // Humidifier + fan
+#endif
+#ifndef ENABLE_LIGHTSABER
+#define ENABLE_LIGHTSABER 0 // Lightsaber relay
+#endif
+
+// PCA9685 (PWM Driver) -- always required for the 4 RGBW lamps
 Adafruit_PWMServoDriver PCA9685 = Adafruit_PWMServoDriver(0x40, Wire);
 
-// MP3 Player
+// MP3 Player -- always required for audio
 SoftwareSerial mySerial(3, 11); // RX, TX (MP3 Player)
 const int volume = 25;          // Volume level
 DY::Player player(&mySerial);
 
-// IR Receiver
+// IR Receiver -- always required
 const int receiver = 13;          // Signal Pin of IR receiver to Arduino Digital Pin 13
 IRrecv irrecv(receiver);          // Create instance of 'irrecv'
 uint32_t last_decodedRawData = 0; // Variable to store the last decodedRawData
 
-// ATtiny I2C Slave Address
+// ATtiny I2C Slave Address (front strip)
 #define slaveAddress 0x23
 
-// Relay (Humidifier)
+// Relay (Humidifier) -- smoke
 const int humedifierRelay = 7;
 
 // Relay (Lightsaber)
 const int lighsaberRelay = 8;
 
-// Fan
+// Fan -- smoke
 const int fanInA = 9;
 const int fanInB = 10;
 const int speed = 120;
 
-// Function to send commands to ATtiny
-void sendToATTiny(uint16_t command)
+// ------------------------------------------------------------
+//  Optional-hardware wrappers
+//  These no-op when their feature is disabled, so the show
+//  functions below stay readable and the #if guards live here.
+// ------------------------------------------------------------
+
+// Send a command to the ATtiny front-strip slave.
+// The original protocol included a 500ms settle delay that the
+// show timings are tuned around -- we keep it even when the strip
+// is disabled so the lamp choreography stays in sync with the audio.
+void frontStripSend(uint16_t command)
 {
+#if ENABLE_FRONT_STRIP
     Wire.beginTransmission(slaveAddress);
     Wire.write(highByte(command));
     Wire.write(lowByte(command));
@@ -53,6 +87,46 @@ void sendToATTiny(uint16_t command)
         Serial.print("Confirmation: 0x");
         Serial.println(confirmation, HEX);
     }
+#else
+    (void)command;
+    delay(500); // Keep choreography in sync with the audio
+#endif
+}
+
+// Smoke = humidifier + fan, switched on/off together.
+void smokeOn()
+{
+#if ENABLE_SMOKE
+    // Turn fan ON
+    analogWrite(fanInA, speed); // PWM Speed. 255 is full speed
+    digitalWrite(fanInB, LOW);  // Direction
+    // Activate humidifier
+    digitalWrite(humedifierRelay, HIGH);
+#endif
+}
+
+void smokeOff()
+{
+#if ENABLE_SMOKE
+    digitalWrite(humedifierRelay, LOW);
+    // Turn fan OFF
+    digitalWrite(fanInA, LOW);
+    digitalWrite(fanInB, LOW);
+#endif
+}
+
+void saberOn()
+{
+#if ENABLE_LIGHTSABER
+    digitalWrite(lighsaberRelay, HIGH);
+#endif
+}
+
+void saberOff()
+{
+#if ENABLE_LIGHTSABER
+    digitalWrite(lighsaberRelay, LOW);
+#endif
 }
 
 void setup()
@@ -79,17 +153,20 @@ void setup()
     int backRight[4] = {0, 1, 2, 3};    // {R, G, B, W}
     MultiRGBWLeds::begin(backLeft, frontLeft, frontRight, backRight);
 
-    // Relay (Humidifier)
+#if ENABLE_SMOKE
+    // Relay (Humidifier) + Fan
     pinMode(humedifierRelay, OUTPUT);
-
-    // Relay (Lightsaber)
-    pinMode(lighsaberRelay, OUTPUT);
-
-    // Fan
     pinMode(fanInA, OUTPUT);
     pinMode(fanInB, OUTPUT);
+#endif
 
-    // Check if ATtiny slave is available. Keep retrying until it is found
+#if ENABLE_LIGHTSABER
+    // Relay (Lightsaber)
+    pinMode(lighsaberRelay, OUTPUT);
+#endif
+
+#if ENABLE_FRONT_STRIP
+    // Check if ATtiny slave is available. Keep retrying until it is found.
     while (true)
     {
         Wire.beginTransmission(slaveAddress);
@@ -104,6 +181,7 @@ void setup()
         Serial.println("Slave not found. Retrying...");
         delay(1000); // Wait 1 second before retrying
     }
+#endif
 }
 
 void loop()
@@ -192,15 +270,8 @@ void iDidOriginal()
 {
     iDidIntro();
 
-    // Turn fan ON
-    analogWrite(fanInA, speed); // PWM Speed. 255 is full speed
-    digitalWrite(fanInB, LOW);  // Direction. To change direction, change use analogWrite(fanPinInB, 255); and digitalWrite(fanPinInA, LOW);
-
-    // Activate humedifierRelay
-    digitalWrite(humedifierRelay, HIGH);
-
-    // Activate lighsaberRelay
-    digitalWrite(lighsaberRelay, HIGH);
+    smokeOn();
+    saberOn();
 
     MultiRGBWLeds::set(
         BACK_LEFT, ORANGE, 10,
@@ -208,7 +279,7 @@ void iDidOriginal()
         FRONT_RIGHT, RED, 10,
         BACK_RIGHT, RED, 10);
 
-    sendToATTiny(0xAAAA); // Send command to ATtiny. This has a delay of 500ms... + 0.5 = 17.5
+    frontStripSend(0xAAAA); // Has a 500ms delay (kept for audio sync)... + 0.5 = 17.5
 
     delay(1800); // + 1.8 = 19.3
 
@@ -234,15 +305,8 @@ void iDidOriginal()
         BACK_RIGHT, RED, 10, RED, 0,
         3000);
 
-    // Deactivate humedifierRelay
-    digitalWrite(humedifierRelay, LOW);
-
-    // Deactivate lighsaberRelay
-    digitalWrite(lighsaberRelay, LOW);
-
-    // Turn fan OFF
-    digitalWrite(fanInA, LOW);
-    digitalWrite(fanInB, LOW);
+    smokeOff();
+    saberOff();
 
     delay(3000);
 }
@@ -251,17 +315,10 @@ void iDidCumbia()
 {
     iDidIntro();
 
-    // Turn fan ON
-    analogWrite(fanInA, speed); // PWM Speed. 255 is full speed
-    digitalWrite(fanInB, LOW);  // Direction. To change direction, change use analogWrite(fanPinInB, 255); and digitalWrite(fanPinInA, LOW);
+    smokeOn();
+    saberOn();
 
-    // Activate humedifierRelay
-    digitalWrite(humedifierRelay, HIGH);
-
-    // Activate lighsaberRelay
-    digitalWrite(lighsaberRelay, HIGH);
-
-    // La primera vuelta de sideToSide la hacemos manual apra poder meter el sendToATTiny en el medio
+    // La primera vuelta de sideToSide la hacemos manual apra poder meter el frontStripSend en el medio
 
     ////////////////////////////////////////////////////////////////////////
     // Arranca la cumbia bebeeeeee
@@ -271,7 +328,7 @@ void iDidCumbia()
         FRONT_RIGHT, INDIGO, 10,
         BACK_RIGHT, INDIGO, 10);
 
-    sendToATTiny(0xBBBB); // Send command to ATtiny. This has a delay of 500ms
+    frontStripSend(0xBBBB); // Has a 500ms delay (kept for audio sync)
 
     delay(164);
 
@@ -302,15 +359,8 @@ void iDidCumbia()
         BACK_RIGHT, WHITE, 10, WHITE, 0,
         8000);
 
-    // Deactivate humedifierRelay
-    digitalWrite(humedifierRelay, LOW);
-
-    // Deactivate lighsaberRelay
-    digitalWrite(lighsaberRelay, LOW);
-
-    // Turn fan OFF
-    digitalWrite(fanInA, LOW);
-    digitalWrite(fanInB, LOW);
+    smokeOff();
+    saberOff();
 }
 
 void iDidLofi()
@@ -323,7 +373,7 @@ void iDidLofi()
         FRONT_RIGHT, MAGENTA, 10,
         BACK_RIGHT, MAGENTA, 10);
 
-    sendToATTiny(0xBBBB); // Send command to ATtiny. This has a delay of 500ms... + 0.5 = 17.5
+    frontStripSend(0xBBBB); // Has a 500ms delay (kept for audio sync)... + 0.5 = 17.5
 }
 
 void iDidMetal()
@@ -336,7 +386,7 @@ void iDidMetal()
         FRONT_RIGHT, RED, 10,
         BACK_RIGHT, RED, 10);
 
-    sendToATTiny(0xAAAA); // Send command to ATtiny. This has a delay of 500ms... + 0.5 = 17.5
+    frontStripSend(0xAAAA); // Has a 500ms delay (kept for audio sync)... + 0.5 = 17.5
 }
 
 void forWhomTheBellTolls()
