@@ -82,7 +82,12 @@ Install via the Arduino IDE Library Manager (or "Add .ZIP Library"):
 - **[MultiRGBWLeds](https://github.com/tferrari92/MultiRGBWLeds)** — companion library for this project (RGBW lamp animations)
 - **Adafruit PWM Servo Driver Library** — PCA9685 control
 - **DYPlayerArduino** — DFPlayer Mini MP3 module
-- **IRremote**
+- **IRremote — version 3.x** ⚠️
+
+> **Important: use IRremote 3.x, not 4.x.** This sketch uses IRremote's 3.x
+> receive API. IRremote 4.x still *compiles* (via a deprecated compatibility
+> shim) but **silently fails to decode** — buttons do nothing. In the Library
+> Manager, pick a 3.x version (e.g. 3.9.0).
 
 **ATtiny85 front strip (only if `ENABLE_FRONT_STRIP`):**
 - **FastLED**
