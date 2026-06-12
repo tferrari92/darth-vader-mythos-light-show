@@ -142,10 +142,10 @@ void setup()
 
     // RGBW lamps. begin() creates/configures the PCA9685 and calls Wire.begin().
     // Each lamp is four PCA9685 channels (0-15) in {R, G, B, W} order.
-    const uint8_t backLeft[4] = {12, 13, 14, 15};
-    const uint8_t frontLeft[4] = {8, 9, 10, 11};
-    const uint8_t frontRight[4] = {4, 5, 6, 7};
-    const uint8_t backRight[4] = {0, 1, 2, 3};
+    const uint8_t backLeft[4] = {4, 5, 6, 7};
+    const uint8_t frontLeft[4] = {0, 1, 2, 3};
+    const uint8_t frontRight[4] = {12, 13, 14, 15};
+    const uint8_t backRight[4] = {8, 9, 10, 11};
     leds.begin(backLeft, frontLeft, frontRight, backRight);
 
 #if ENABLE_SMOKE
@@ -403,13 +403,13 @@ void iDidIntro()
     //////////////////////////////////////////
     // Up to here we MUST sum 1.2 seconds!!!
     leds.crossFade(
-        LampPosition::FrontLeft, LampColor::White, 0, LampColor::White, 10,
-        LampPosition::FrontRight, LampColor::Sky, 0, LampColor::Sky, 10,
+        LampPosition::FrontLeft, LampColor::Sky, 0, LampColor::Sky, 10,
+        LampPosition::FrontRight, LampColor::White, 0, LampColor::White, 10,
         8000);
 
     leds.crossFade(
-        LampPosition::FrontLeft, LampColor::White, 10, LampColor::White, 0,
-        LampPosition::FrontRight, LampColor::Sky, 10, LampColor::Sky, 0,
+        LampPosition::FrontLeft, LampColor::Sky, 10, LampColor::Sky, 0,
+        LampPosition::FrontRight, LampColor::White, 10, LampColor::White, 0,
         4500);
 
     //////////////////////////////////////////
