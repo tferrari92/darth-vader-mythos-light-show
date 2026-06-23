@@ -10,6 +10,11 @@ extra effects are **optional** and toggled with feature flags (see
 lightsaber. With every flag off, the sketch runs the lamps and audio standalone — it does
 **not** wait for the ATtiny85 or touch any relays.
 
+## Demo
+
+- 🎥 **Video demo:** _TODO: YouTube link_
+- 🖼️ **Build photos:** _TODO: link_
+
 ## Architecture
 
 - **Master — Arduino Uno** ([`master/master.ino`](master/master.ino))
@@ -30,6 +35,63 @@ lightsaber. With every flag off, the sketch runs the lamps and audio standalone 
   - [`FastLED_RGBW.h`](attiny85/FastLED_RGBW.h) adds RGBW support to FastLED
     (credit: Jim Bumgardner & David Madison).
   - Only needed if you enable the front strip; otherwise you can ignore the `attiny85/` sketch.
+
+## Bill of materials
+
+Build the **Basic** set first; add any of the optional modules later (each maps to a
+[feature flag](#configuration)).
+
+### Basic — 4 lamps + audio
+- Arduino Uno (or compatible) — _TODO: AliExpress link_
+- PCA9685 16-channel PWM driver — _TODO: AliExpress link_
+- 4× RGBW LED lamps (common-anode) — _TODO: AliExpress link_
+- DFPlayer Mini MP3 module — _TODO: AliExpress link_
+- Speaker (3 W, 4–8 Ω) — _TODO: AliExpress link_
+- microSD card — _TODO: AliExpress link_
+- IR receiver (e.g. VS1838B) + IR remote — _TODO: AliExpress link_
+- 5 V power supply — _TODO: AliExpress link_
+- Hookup wire / perfboard — _TODO: AliExpress link_
+
+### Add-on — Front LED strip
+- ATtiny85 — _TODO: AliExpress link_
+- WS2812B NeoPixel strip (55 LEDs) — _TODO: AliExpress link_
+
+### Add-on — Back smoke (LED + fan + humidifier)
+- Ultrasonic mist / humidifier module — _TODO: AliExpress link_
+- Fan — _TODO: AliExpress link_
+- LED — _TODO: AliExpress link_
+- Relay module — _TODO: AliExpress link_
+
+### Add-on — Lightsaber
+- Lightsaber light — _TODO: AliExpress link_
+- Relay module — _TODO: AliExpress link_
+
+## Wiring
+
+- 📐 **Wiring diagram:** https://imgur.com/a/VOA90VD
+
+The diagram shows the full wiring including all optional modules — wire only the sections
+for the modules you're building.
+
+## Dependencies
+
+Install via the Arduino IDE Library Manager (or "Add .ZIP Library"):
+
+**Master (always required):**
+- **[MultiRGBWLeds](https://github.com/tferrari92/MultiRGBWLeds)** — companion library for this project (RGBW lamp animations)
+- **Adafruit PWM Servo Driver Library** — PCA9685 control
+- **DYPlayerArduino** — DFPlayer Mini MP3 module
+- **IRremote — version 3.x** ⚠️
+
+> **Important: use IRremote 3.x, not 4.x.** This sketch uses IRremote's 3.x
+> receive API. IRremote 4.x still *compiles* (via a deprecated compatibility
+> shim) but **silently fails to decode** — buttons do nothing. In the Library
+> Manager, pick a 3.x version (e.g. 3.9.0).
+
+**ATtiny85 front strip (only if `ENABLE_FRONT_STRIP`):**
+- **FastLED**
+
+`SoftwareSerial` and `Wire` ship with the Arduino core.
 
 ## Configuration
 
@@ -62,38 +124,6 @@ Note: the lamp choreography is timed to the audio, so the small settle delays ar
 front-strip commands are preserved even when the strip is disabled — the show stays in sync
 in every configuration.
 
-## Tracks
-
-The IR remote maps five tracks plus stop, each with its own routine (timed to the audio).
-Effects in *italics* below only fire if their feature flag is enabled:
-
-1. **I Did – Original** — orange/red crossfade *(+ smoke, saber, front-strip fire)*
-2. **I Did – Cumbia** — green/indigo side-to-side and spin choreography *(+ smoke, saber, front-strip blue)*
-3. **I Did – Lofi** — indigo/magenta static set *(+ front-strip blue)*
-4. **I Did – Metal** — orange/red static set *(+ front-strip fire)*
-5. **For Whom The Bell Tolls** — delayed red fade-in
-- **Play/Pause** — stop
-
-## Dependencies
-
-Install via the Arduino IDE Library Manager (or "Add .ZIP Library"):
-
-**Master (always required):**
-- **[MultiRGBWLeds](https://github.com/tferrari92/MultiRGBWLeds)** — companion library for this project (RGBW lamp animations)
-- **Adafruit PWM Servo Driver Library** — PCA9685 control
-- **DYPlayerArduino** — DFPlayer Mini MP3 module
-- **IRremote — version 3.x** ⚠️
-
-> **Important: use IRremote 3.x, not 4.x.** This sketch uses IRremote's 3.x
-> receive API. IRremote 4.x still *compiles* (via a deprecated compatibility
-> shim) but **silently fails to decode** — buttons do nothing. In the Library
-> Manager, pick a 3.x version (e.g. 3.9.0).
-
-**ATtiny85 front strip (only if `ENABLE_FRONT_STRIP`):**
-- **FastLED**
-
-`SoftwareSerial` and `Wire` ship with the Arduino core.
-
 ## Build & flash
 
 1. Install the dependencies above.
@@ -103,13 +133,36 @@ Install via the Arduino IDE Library Manager (or "Add .ZIP Library"):
    [`attiny85/attiny85.ino`](attiny85/attiny85.ino), select the ATtiny85 via
    [ATTinyCore](https://github.com/SpenceKonde/ATTinyCore), upload.
 
-> **Audio:** the MP3 tracks live on the DFPlayer Mini's microSD card and are **not** included
-> in this repository.
+## Controls
 
-## Notes
+The IR remote maps each track to a routine (timed to the audio). Effects in *italics*
+only fire if their feature flag is enabled. (Button codes are for the bundled NEC remote;
+if yours differs, read the HEX over Serial at 9600 and update the cases in `master.ino`.)
 
-Wiring diagrams, a bill of materials, and the audio are intentionally left out of this repo
-for now — this is the firmware only.
+| Button | Action |
+|--------|--------|
+| **1** | **I Did – Original** — orange/red crossfade *(+ smoke, saber, front-strip fire)* |
+| **2** | **I Did – Cumbia** — green/indigo side-to-side and spins *(+ smoke, saber, front-strip blue)* |
+| **3** | **I Did – Lofi** — indigo/magenta static set *(+ front-strip blue)* |
+| **4** | **I Did – Metal** — orange/red static set *(+ front-strip fire)* |
+| **5** | **For Whom The Bell Tolls** — delayed red fade-in |
+| **Play/Pause** | Stop audio |
+| **Power** | Toggle the always-on ambient scene (orange right / dim left), no audio |
+
+## Enclosure
+
+3D-printable enclosure that holds everything together — STL files live in
+[`enclosure/`](enclosure/). _(TODO: add STL files.)_
+
+## Audio
+
+The five music tracks live on the DFPlayer Mini's **microSD card** as `0001.mp3` … `0006.mp3`
+(track 6 is a short silence used as "stop"). They are **not** committed to this repo.
+
+- ⬇️ **Download (my tracks):** _TODO: link (GitHub Release / Drive)_
+
+> ⚠️ **Copyright:** track 5, "For Whom The Bell Tolls," is Metallica's and is **not**
+> distributed here — supply your own copy. Same for any other track you don't have rights to.
 
 ## License
 
