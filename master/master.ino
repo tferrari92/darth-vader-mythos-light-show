@@ -40,7 +40,9 @@ DY::Player player(&mySerial);
 // IR Receiver -- always required
 const int receiver = 13;          // Signal Pin of IR receiver to Arduino Digital Pin 13
 IRrecv irrecv(receiver);          // Create instance of 'irrecv'
-uint32_t last_decodedRawData = 0; // Variable to store the last decodedRawData
+bool ambientOn = false;               // Power button toggles the static ambient scene
+unsigned long lastPressMs = 0;        // millis() of the last accepted IR press
+const unsigned long debounceMs = 500; // ignore repeat presses within this window
 
 // ATtiny I2C Slave Address (front strip)
 #define slaveAddress 0x23
@@ -183,17 +185,24 @@ void loop()
 {
     if (irrecv.decode())
     { // Have we received an IR signal?
-        // Check if it is a repeat IR code
-        if (irrecv.decodedIRData.flags)
+        unsigned long now = millis();
+        uint32_t code = irrecv.decodedIRData.decodedRawData;
+        bool isRepeat = irrecv.decodedIRData.flags & IRDATA_FLAGS_IS_REPEAT;
+
+        // Guardrail: ignore NEC repeat frames (button held) and any press within
+        // the debounce window. Stops one physical press being read twice, which
+        // made the Power toggle flicker on/off.
+        if (isRepeat || code == 0 || (now - lastPressMs) < debounceMs)
         {
-            // Set the current decodedRawData to the last decodedRawData
-            irrecv.decodedIRData.decodedRawData = last_decodedRawData;
+            irrecv.resume();
+            return;
         }
+        lastPressMs = now;
 
         Serial.print("Button HEX: 0x");
-        Serial.println(irrecv.decodedIRData.decodedRawData, HEX);
+        Serial.println(code, HEX);
 
-        switch (irrecv.decodedIRData.decodedRawData)
+        switch (code)
         {
 
             // BUTTON HEX CODES:
@@ -219,14 +228,22 @@ void loop()
             // 8                  0xAD52FF00
             // 9                  0xB54AFF00
 
-        case 0xE916FF00: // Button 0 pressed -- static ambient scene (no audio, no animation)
-            Serial.println("Static: orange right / faint white left");
-            leds.set(
-                LampPosition::FrontLeft, LampColor::White, 1,
-                LampPosition::BackLeft, LampColor::Orange, 5,
-                LampPosition::FrontRight, LampColor::White, 4,
-                LampPosition::BackRight, LampColor::Red, 2
-                );
+        case 0xBA45FF00: // Power button -- toggle static ambient scene (no audio, no animation)
+            ambientOn = !ambientOn;
+            if (ambientOn)
+            {
+                Serial.println("Ambient ON");
+                leds.set(
+                    LampPosition::FrontLeft, LampColor::White, 1,
+                    LampPosition::BackLeft, LampColor::Orange, 5,
+                    LampPosition::FrontRight, LampColor::White, 4,
+                    LampPosition::BackRight, LampColor::Red, 2);
+            }
+            else
+            {
+                Serial.println("Ambient OFF");
+                leds.resetAllPositions();
+            }
             break;
 
         case 0xF30CFF00: // Button 1 pressed
@@ -265,8 +282,6 @@ void loop()
             break;
         }
 
-        // Store the last decodedRawData
-        last_decodedRawData = irrecv.decodedIRData.decodedRawData;
         irrecv.resume(); // Receive the next value
     }
 }
