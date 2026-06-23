@@ -219,6 +219,16 @@ void loop()
             // 8                  0xAD52FF00
             // 9                  0xB54AFF00
 
+        case 0xE916FF00: // Button 0 pressed -- static ambient scene (no audio, no animation)
+            Serial.println("Static: orange right / faint white left");
+            leds.set(
+                LampPosition::FrontLeft, LampColor::White, 1,
+                LampPosition::BackLeft, LampColor::Orange, 5,
+                LampPosition::FrontRight, LampColor::White, 4,
+                LampPosition::BackRight, LampColor::Red, 2
+                );
+            break;
+
         case 0xF30CFF00: // Button 1 pressed
             Serial.println("Playing: 'I Did - Original'");
             player.playSpecified(1);
@@ -270,8 +280,8 @@ void iDidOriginal()
 
     leds.set(
         LampPosition::BackLeft, LampColor::Orange, 10,
-        LampPosition::FrontLeft, LampColor::Orange, 10,
-        LampPosition::FrontRight, LampColor::Red, 10,
+        LampPosition::FrontLeft, LampColor::Red, 3,
+        LampPosition::FrontRight, LampColor::White, 6,
         LampPosition::BackRight, LampColor::Red, 10);
 
     frontStripSend(0xAAAA); // Has a 500ms delay (kept for audio sync)... + 0.5 = 17.5
@@ -280,23 +290,23 @@ void iDidOriginal()
 
     leds.crossFade(
         LampPosition::BackLeft, LampColor::Orange, 10, LampColor::Orange, 3,
-        LampPosition::FrontLeft, LampColor::Orange, 10, LampColor::Orange, 3,
-        LampPosition::FrontRight, LampColor::Red, 10, LampColor::Red, 3,
+        LampPosition::FrontLeft, LampColor::Red, 3, LampColor::Red, 1,
+        LampPosition::FrontRight, LampColor::White, 6, LampColor::White, 1,
         LampPosition::BackRight, LampColor::Red, 10, LampColor::Red, 3,
         5500);
 
     leds.set(
         LampPosition::BackLeft, LampColor::Orange, 10,
-        LampPosition::FrontLeft, LampColor::Orange, 10,
-        LampPosition::FrontRight, LampColor::Red, 10,
+        LampPosition::FrontLeft, LampColor::Red, 3,
+        LampPosition::FrontRight, LampColor::White, 6,
         LampPosition::BackRight, LampColor::Red, 10);
 
     delay(5900); // + 5.9 = 30.7
 
     leds.crossFade(
         LampPosition::BackLeft, LampColor::Orange, 10, LampColor::Orange, 0,
-        LampPosition::FrontLeft, LampColor::Orange, 10, LampColor::Orange, 0,
-        LampPosition::FrontRight, LampColor::Red, 10, LampColor::Red, 0,
+        LampPosition::FrontLeft, LampColor::Red, 3, LampColor::Red, 0,
+        LampPosition::FrontRight, LampColor::White, 6, LampColor::White, 0,
         LampPosition::BackRight, LampColor::Red, 10, LampColor::Red, 0,
         3000);
 
