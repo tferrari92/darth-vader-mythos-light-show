@@ -44,6 +44,12 @@ bool ambientOn = false;               // Power button toggles the static ambient
 unsigned long lastPressMs = 0;        // millis() of the last accepted IR press
 const unsigned long debounceMs = 500; // ignore repeat presses within this window
 
+// Audio amp keep-alive: a low, looping tone (track 7 on the SD) plays whenever
+// nothing else is, so the amp never sees silence and never auto-sleeps.
+const int keepAliveTrack = 7;
+unsigned long lastKeepAliveMs = 0;
+const unsigned long keepAliveCheckMs = 1000; // how often to re-check play state
+
 // ATtiny I2C Slave Address (front strip)
 #define slaveAddress 0x23
 
@@ -183,6 +189,18 @@ void setup()
 
 void loop()
 {
+    // Keep the audio amp awake. If nothing is playing, (re)start the looping
+    // keep-alive tone. Throttled so we don't spam the DFPlayer over serial.
+    unsigned long tNow = millis();
+    if (tNow - lastKeepAliveMs >= keepAliveCheckMs)
+    {
+        lastKeepAliveMs = tNow;
+        if (player.checkPlayState() == DY::PlayState::Stopped)
+        {
+            player.playSpecified(keepAliveTrack);
+        }
+    }
+
     if (irrecv.decode())
     { // Have we received an IR signal?
         unsigned long now = millis();
