@@ -136,6 +136,45 @@ void saberOff()
 #endif
 }
 
+// ------------------------------------------------------------
+//  Ambient scene
+//  The calm resting state the rig falls back to. The Power button
+//  snaps to it; finished shows fade up into it.
+// ------------------------------------------------------------
+
+// Snap straight to the ambient scene (used by the Power toggle).
+void setAmbient()
+{
+    leds.set(
+        LampPosition::FrontLeft, LampColor::White, 1,
+        LampPosition::BackLeft, LampColor::Orange, 5,
+        LampPosition::FrontRight, LampColor::White, 4,
+        LampPosition::BackRight, LampColor::Red, 2);
+    ambientOn = true;
+}
+
+// Fade up into the ambient scene from dark over durationMs.
+void fadeToAmbient(uint16_t durationMs)
+{
+    leds.resetAllPositions(); // known starting point (off) so the fade is clean
+    leds.crossFade(
+        LampPosition::FrontLeft, LampColor::White, 0, LampColor::White, 1,
+        LampPosition::BackLeft, LampColor::Orange, 0, LampColor::Orange, 5,
+        LampPosition::FrontRight, LampColor::White, 0, LampColor::White, 4,
+        LampPosition::BackRight, LampColor::Red, 0, LampColor::Red, 2,
+        durationMs);
+    ambientOn = true;
+}
+
+// Called when a light show finishes: hold for a couple of seconds,
+// then gently drift back into the ambient scene.
+void returnToAmbient()
+{
+    leds.resetAllPositions(); // clear whatever the show left lit
+    delay(500);              // a couple of seconds of darkness after the show
+    fadeToAmbient(3000);      // gentle fade-in
+}
+
 void setup()
 {
     // Terminal
@@ -251,11 +290,7 @@ void loop()
             if (ambientOn)
             {
                 Serial.println("Ambient ON");
-                leds.set(
-                    LampPosition::FrontLeft, LampColor::White, 1,
-                    LampPosition::BackLeft, LampColor::Orange, 5,
-                    LampPosition::FrontRight, LampColor::White, 4,
-                    LampPosition::BackRight, LampColor::Red, 2);
+                setAmbient();
             }
             else
             {
@@ -268,30 +303,35 @@ void loop()
             Serial.println("Playing: 'I Did - Original'");
             player.playSpecified(1);
             iDidOriginal();
+            returnToAmbient();
             break;
 
         case 0xE718FF00: // Button 2 pressed
             Serial.println("Playing: 'I Did - Cumbia'");
             player.playSpecified(2);
             iDidCumbia();
+            returnToAmbient();
             break;
 
         case 0xA15EFF00: // Button 3 pressed
             Serial.println("Playing: 'I Did - Lofi'");
             player.playSpecified(3);
             iDidLofi();
+            returnToAmbient();
             break;
 
         case 0xF708FF00: // Button 4 pressed
             Serial.println("Playing: 'I Did - Metal'");
             player.playSpecified(4);
             iDidMetal();
+            returnToAmbient();
             break;
 
         case 0xE31CFF00: // Button 5 pressed
             Serial.println("Playing: 'For Whom The Bell Tolls'");
             player.playSpecified(5);
             forWhomTheBellTolls();
+            returnToAmbient();
             break;
 
         case 0xBF40FF00: // Button Play/Pause pressed
