@@ -224,6 +224,10 @@ void setup()
         delay(1000); // Wait 1 second before retrying
     }
 #endif
+
+    // Power-on default: rig rests in the ambient scene.
+    returnToAmbient(); 
+    setAmbient();
 }
 
 void loop()
