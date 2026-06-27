@@ -169,7 +169,7 @@ if yours differs, read the HEX over Serial at 9600 and update the cases in `mast
 The five music tracks live on the DFPlayer Mini's **microSD card** as `0001.mp3` … `0006.mp3`
 (track 6 is a short silence used as "stop"). They are **not** committed to this repo.
 
-- ⬇️ [**Download (my tracks):**](https://drive.google.com/drive/folders/14aJys-XmJGN54O0cnzooF6nU0tt411FF?usp=sharing)
+- ⬇️ [**Download tracks**](https://drive.google.com/drive/folders/14aJys-XmJGN54O0cnzooF6nU0tt411FF?usp=sharing)
 
 > ⚠️ **Copyright:** track 5, "For Whom The Bell Tolls," is Metallica's and is **not**
 > distributed here — supply your own copy. Same for any other track you don't have rights to.
