@@ -171,9 +171,6 @@ The five music tracks live on the DFPlayer Mini's **microSD card** as `0001.mp3`
 
 - ⬇️ [**Download tracks**](https://drive.google.com/drive/folders/14aJys-XmJGN54O0cnzooF6nU0tt411FF?usp=sharing)
 
-> ⚠️ **Copyright:** track 5, "For Whom The Bell Tolls," is Metallica's and is **not**
-> distributed here — supply your own copy. Same for any other track you don't have rights to.
-
 ## License
 
 [MIT](LICENSE) © Tomas Ferrari
