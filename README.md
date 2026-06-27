@@ -2,7 +2,7 @@
 
 An IR-remote-driven light-and-effects show for a Darth Vader Mythos statue, built on an
 Arduino Uno. Each track on the remote triggers a choreographed routine synchronized to
-music played from a DFPlayer Mini.
+music played from a DY-SV5W MP3 module.
 
 The **basic build is 4 RGBW lamps + audio** — that's all you need to run the show. Three
 extra effects are **optional** and toggled with feature flags (see
@@ -21,7 +21,7 @@ lightsaber. With every flag off, the sketch runs the lamps and audio standalone 
   - Drives **4× RGBW lamps** through a **PCA9685** 16-channel PWM driver, using the
     [MultiRGBWLeds](https://github.com/tferrari92/MultiRGBWLeds) library for the animations
     (crossfade, set, side-to-side, spin, flash). *(always on)*
-  - Plays audio from a **DFPlayer Mini** MP3 module (SoftwareSerial). *(always on)*
+  - Plays audio from a **DY-SV5W** MP3 module (SoftwareSerial). *(always on)*
   - Reads an **IR remote** to select tracks. *(always on)*
   - *Optional:* switches a **smoke** rig (humidifier relay + fan H-bridge) and a
     **lightsaber relay**.
@@ -62,7 +62,7 @@ Build the **Basic** set first; add any of the optional modules later (each maps 
 
 ### Add-on — Front LED strip
 - [Digispark ATtiny85](https://a.co/d/04rXa1Af)
-- [3.28ft/1m 60 Pixel RGBW (Warm White) Led Strip](https://a.aliexpress.com/_m0XdlDt)
+- [3.28ft/1m 60 Pixel RGBW (Warm White) Led Strip](https://a.aliexpress.com/_m0XdlDt) — the sketch drives the first 55 pixels
 
 ### Add-on — Back smoke (LED + fan + humidifier)
 - [5V Ultrasonic mist / humidifier module](https://a.aliexpress.com/_m0UEqIB)
@@ -89,7 +89,7 @@ Install via the Arduino IDE Library Manager (or "Add .ZIP Library"):
 **Master (always required):**
 - **[MultiRGBWLeds](https://github.com/tferrari92/MultiRGBWLeds)** — companion library for this project (RGBW lamp animations)
 - **Adafruit PWM Servo Driver Library** — PCA9685 control
-- **DYPlayerArduino** — DFPlayer Mini MP3 module
+- **DYPlayerArduino** — DY-SV5W MP3 module
 - **IRremote — version 3.x** ⚠️
 
 > **Important: use IRremote 3.x, not 4.x.** This sketch uses IRremote's 3.x
@@ -159,13 +159,22 @@ if yours differs, read the HEX over Serial at 9600 and update the cases in `mast
 
 ## Enclosure
 
-3D-printable enclosure that holds everything together — STL files live in
-[`enclosure/`](enclosure/). _(TODO: add STL files.)_
+3D-printable enclosure that holds everything together — the STL lives at
+[`enclosure/enclosure.stl`](enclosure/enclosure.stl).
 
 ## Audio
 
-The five music tracks live on the DFPlayer Mini's **microSD card** as `0001.mp3` … `0006.mp3`
-(track 6 is a short silence used as "stop"). They are **not** committed to this repo.
+The audio files live on the DY-SV5W's **microSD card**, numbered in track order:
+
+- `0001 - I Did (Original).mp3`
+- `0002 - I Did (Cumbia).mp3`
+- `0003 - I Did (Lofi).mp3`
+- `0004 - I Did (Metal).mp3`
+- `0005 - For Whom The Bell Tolls.mp3` (Epic hallway scene from Rogue One)
+- `0006 - KeepAlive.wav` — a low, looping keep-alive tone that plays whenever nothing else is,
+  so the audio amp never sees silence and never auto-sleeps
+
+They are **not** committed to this repo.
 
 - ⬇️ [**Download tracks**](https://drive.google.com/drive/folders/14aJys-XmJGN54O0cnzooF6nU0tt411FF?usp=sharing)
 

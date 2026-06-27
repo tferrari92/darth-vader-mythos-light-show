@@ -44,9 +44,9 @@ bool ambientOn = false;               // Power button toggles the static ambient
 unsigned long lastPressMs = 0;        // millis() of the last accepted IR press
 const unsigned long debounceMs = 500; // ignore repeat presses within this window
 
-// Audio amp keep-alive: a low, looping tone (track 7 on the SD) plays whenever
+// Audio amp keep-alive: a low, looping tone (track 6 on the SD) plays whenever
 // nothing else is, so the amp never sees silence and never auto-sleeps.
-const int keepAliveTrack = 7;
+const int keepAliveTrack = 6;
 unsigned long lastKeepAliveMs = 0;
 const unsigned long keepAliveCheckMs = 1000; // how often to re-check play state
 
@@ -336,11 +336,6 @@ void loop()
             player.playSpecified(5);
             forWhomTheBellTolls();
             returnToAmbient();
-            break;
-
-        case 0xBF40FF00: // Button Play/Pause pressed
-            Serial.println("Playing: EMPTY MP3");
-            player.playSpecified(6); // Empty sound so used as stop
             break;
         }
 
