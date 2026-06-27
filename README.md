@@ -78,10 +78,9 @@ Build the **Basic** set first; add any of the optional modules later (each maps 
 
 ## Wiring
 
-- 📐 **Wiring diagram:** https://imgur.com/a/VOA90VD
+<p title="" align="center"> <img src="https://i.imgur.com/VOA90VD.jpg"> </p>
 
-The diagram shows the full wiring including all optional modules — wire only the sections
-for the modules you're building.
+The diagram shows the full wiring including all optional modules — wire only the sections for the modules you're building.
 
 ## Dependencies
 
