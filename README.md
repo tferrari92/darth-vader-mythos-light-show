@@ -42,28 +42,38 @@ Build the **Basic** set first; add any of the optional modules later (each maps 
 [feature flag](#configuration)).
 
 ### Basic — 4 lamps + audio
-- Arduino Uno (or compatible) — _TODO: AliExpress link_
-- PCA9685 16-channel PWM driver — _TODO: AliExpress link_
-- 4× RGBW LED lamps (common-anode) — _TODO: AliExpress link_
-- DFPlayer Mini MP3 module — _TODO: AliExpress link_
-- Speaker (3 W, 4–8 Ω) — _TODO: AliExpress link_
-- microSD card — _TODO: AliExpress link_
-- IR receiver (e.g. VS1838B) + IR remote — _TODO: AliExpress link_
-- 5 V power supply — _TODO: AliExpress link_
-- Hookup wire / perfboard — _TODO: AliExpress link_
+- [Arduino Uno (or compatible)](https://a.co/d/03DOTip2)
+- [PCA9685 16-channel PWM driver](https://a.co/d/0jiwvAFP)
+- [4× RGBW LED lamps (common-anode)](https://a.co/d/08rguR4Z)
+- [DY-SV5W Playback Module MP3 Board](https://a.co/d/0iwnKNiH) 
+- [3.5mm Aux Cable](https://a.co/d/05ZY8Oyp)
+- [Speaker (I used a Bose SoundLink Mini I)](https://a.co/d/0ehsrhri)
+- [microSD card](https://a.co/d/0cLakK3m)
+- [IR receiver + IR remote](https://a.co/d/0esAqea8)
+- [12V powe supply](https://a.co/d/0cVwCTjt)
+- [5V power supply](https://a.co/d/0ai2ccZ6)
+
+#### Optional / Quality of life Items
+  - [Lever Wire Connectors](https://a.co/d/073DuDCG)
+  - [4x 5 Pin Magnetic Pogo Pin Connector](https://a.co/d/08rJCHPg)
+  - [12V DC Male + Female Connector](https://a.co/d/08ywx2uR)
+  - [USB Extensions Cable](https://a.co/d/0bbNSKzB)
+  - [Matte Window Film](https://a.co/d/0bbNSKzB)
 
 ### Add-on — Front LED strip
-- ATtiny85 — _TODO: AliExpress link_
-- WS2812B NeoPixel strip (55 LEDs) — _TODO: AliExpress link_
+- [Digispark ATtiny85](https://a.co/d/04rXa1Af)
+- [3.28ft/1m 60 Pixel RGBW (Warm White) Led Strip](https://a.aliexpress.com/_m0XdlDt)
 
 ### Add-on — Back smoke (LED + fan + humidifier)
-- Ultrasonic mist / humidifier module — _TODO: AliExpress link_
-- Fan — _TODO: AliExpress link_
+- [5V Ultrasonic mist / humidifier module](https://a.aliexpress.com/_m0UEqIB)
+- [5V L9110 Fan Motor Module](https://a.aliexpress.com/_msmvBKT) 
 - LED — _TODO: AliExpress link_
 - Relay module — _TODO: AliExpress link_
 
 ### Add-on — Lightsaber
-- Lightsaber light — _TODO: AliExpress link_
+- [3V 260mm White Led Filament](https://a.aliexpress.com/_mP3VffN)
+- Transparent Acrylic Tube
+- UV Resin
 - Relay module — _TODO: AliExpress link_
 
 ## Wiring
