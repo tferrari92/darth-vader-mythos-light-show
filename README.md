@@ -151,13 +151,12 @@ if yours differs, read the HEX over Serial at 9600 and update the cases in `mast
 
 | Button | Action |
 |--------|--------|
-| **1** | **I Did – Original** — orange/red crossfade *(+ smoke, saber, front-strip fire)* |
-| **2** | **I Did – Cumbia** — green/indigo side-to-side and spins *(+ smoke, saber, front-strip blue)* |
-| **3** | **I Did – Lofi** — indigo/magenta static set *(+ front-strip blue)* |
-| **4** | **I Did – Metal** — orange/red static set *(+ front-strip fire)* |
-| **5** | **For Whom The Bell Tolls** — delayed red fade-in |
-| **Play/Pause** | Stop audio |
-| **Power** | Toggle the always-on ambient scene (orange right / dim left), no audio |
+| **1** | **I Did – Original** |
+| **2** | **I Did – Cumbia** |
+| **3** | **I Did – Lofi** |
+| **4** | **I Did – Metal**  |
+| **5** | **For Whom The Bell Tolls** |
+| **Power** | Toggle the always-on ambient scene |
 
 ## Enclosure
 
