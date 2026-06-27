@@ -78,7 +78,7 @@ Build the **Basic** set first; add any of the optional modules later (each maps 
 
 ## Wiring
 
-<p title="" align="center"> <img src="https://i.imgur.com/VOA90VD.png"> </p>
+<p title="wiring" align="center"> <img src="https://i.imgur.com/5GWp9F6.jpeg"> </p>
 
 The diagram shows the full wiring including all optional modules — wire only the sections for the modules you're building.
 
