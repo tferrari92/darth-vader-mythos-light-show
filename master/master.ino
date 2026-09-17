@@ -148,7 +148,7 @@ void setAmbient()
     leds.set(
         LampPosition::FrontLeft, LampColor::White, 1,
         LampPosition::BackLeft, LampColor::Orange, 5,
-        LampPosition::FrontRight, LampColor::White, 4,
+        LampPosition::FrontRight, LampColor::White, 10,
         LampPosition::BackRight, LampColor::Red, 2);
     ambientOn = true;
 }
@@ -160,7 +160,7 @@ void fadeToAmbient(uint16_t durationMs)
     leds.crossFade(
         LampPosition::FrontLeft, LampColor::White, 0, LampColor::White, 1,
         LampPosition::BackLeft, LampColor::Orange, 0, LampColor::Orange, 5,
-        LampPosition::FrontRight, LampColor::White, 0, LampColor::White, 4,
+        LampPosition::FrontRight, LampColor::White, 0, LampColor::White, 10,
         LampPosition::BackRight, LampColor::Red, 0, LampColor::Red, 2,
         durationMs);
     ambientOn = true;
